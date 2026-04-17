@@ -1,0 +1,19 @@
+
+ ▐▛███▜▌   Claude Code v2.1.71
+▝▜█████▛▘  Sonnet 4.6 · API Usage Billing
+  ▘▘ ▝▝    /mnt/c/Users/win10/Desktop/Claude-Code-Course/expense-tracker
+
+❯ hi                                                                            
+
+● Hi! How can I help you with the Spendly expense tracker project today?
+
+❯ hi                                                                            
+  ⎿  Not logged in · Please run /login
+
+❯ /exit                                                                         
+  ⎿  Catch you later!
+
+❯ what is your name                                                             
+
+● I'm Claude, made by Anthropic. I'm here to help you with software engineering
+  tasks. What can I do for you today?

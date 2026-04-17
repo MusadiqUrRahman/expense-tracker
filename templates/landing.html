@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}Spendly — Track Every Rupee{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <div class="hero-center">
+        <div class="hero-badge">Free to use · No credit card needed</div>
+        <h1 class="hero-title">
+            Track every rupee.<br>
+            <em>Know where it goes.</em>
+        </h1>
+        <p class="hero-subtitle">
+            Log your daily expenses, see where your money flows each month,
+            and make smarter spending decisions — all in one simple, free app.
+        </p>
+        <div class="hero-actions">
+            <a href="{{ url_for('register') }}" class="btn-hero">Start tracking free</a>
+            <a href="{{ url_for('login') }}" class="btn-hero">Sign in</a>
+        </div>
+        <button type="button" class="btn-how-it-works" id="openVideoModal">▶ See how it works</button>
+    </div>
+
+    <!-- Video modal -->
+    <div class="video-modal-overlay" id="videoModal">
+        <div class="video-modal">
+            <button type="button" class="video-modal-close" id="closeVideoModal">&times;</button>
+            <div class="video-modal-body">
+                <iframe id="videoIframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+    <div class="hero-preview">
+        <div class="preview-frame">
+            <div class="preview-dots">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-yellow"></span>
+                <span class="dot dot-green"></span>
+            </div>
+            <div class="preview-stats">
+                <div class="stat-card">
+                    <span class="stat-label">Total Spent</span>
+                    <span class="stat-value">₹24,500</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">This Month</span>
+                    <span class="stat-value">₹8,200</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Categories</span>
+                    <span class="stat-value">5</span>
+                </div>
+            </div>
+            <div class="preview-chart">
+                <div class="chart-row">
+                    <span class="chart-cat">Food</span>
+                    <div class="chart-bar-track">
+                        <div class="chart-bar" style="width: 65%"></div>
+                    </div>
+                </div>
+                <div class="chart-row">
+                    <span class="chart-cat">Transport</span>
+                    <div class="chart-bar-track">
+                        <div class="chart-bar" style="width: 50%"></div>
+                    </div>
+                </div>
+                <div class="chart-row">
+                    <span class="chart-cat">Bills</span>
+                    <div class="chart-bar-track">
+                        <div class="chart-bar" style="width: 45%"></div>
+                    </div>
+                </div>
+                <div class="chart-row">
+                    <span class="chart-cat">Entertainment</span>
+                    <div class="chart-bar-track">
+                        <div class="chart-bar" style="width: 30%"></div>
+                    </div>
+                </div>
+                <div class="chart-row">
+                    <span class="chart-cat">Health</span>
+                    <div class="chart-bar-track">
+                        <div class="chart-bar" style="width: 20%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <div class="features-inner">
+        <div class="feature-card">
+            <div class="feature-icon">₹</div>
+            <h3 class="feature-title">Log expenses instantly</h3>
+            <p class="feature-body">Add any expense in seconds. Category, amount, date, description — all in one simple form.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">◎</div>
+            <h3 class="feature-title">Understand your patterns</h3>
+            <p class="feature-body">See exactly where your money goes with category breakdowns and monthly summaries.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">◷</div>
+            <h3 class="feature-title">Filter by time period</h3>
+            <p class="feature-body">View your spending for any date range — last week, last month, or a custom period.</p>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="cta-inner">
+        <h2 class="cta-title">Ready to take control?</h2>
+        <p class="cta-body">Join thousands of people who track their expenses with Spendly.</p>
+        <a href="{{ url_for('register') }}" class="btn-primary">Create free account</a>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    var VIDEO_URL = 'https://www.youtube.com/embed/dQw4w9WgXcQ';
+
+    var overlay = document.getElementById('videoModal');
+    var iframe  = document.getElementById('videoIframe');
+    var openBtn = document.getElementById('openVideoModal');
+    var closeBtn = document.getElementById('closeVideoModal');
+
+    function openModal() {
+        iframe.src = VIDEO_URL + '?autoplay=1';
+        overlay.classList.add('is-open');
+    }
+
+    function closeModal() {
+        overlay.classList.remove('is-open');
+        iframe.src = '';
+    }
+
+    openBtn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+
+    overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) closeModal();
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeModal();
+    });
+})();
+</script>
+{% endblock %}
