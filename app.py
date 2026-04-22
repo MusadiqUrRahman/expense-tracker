@@ -1,8 +1,13 @@
-from flask import Flask, render_template
+import os
+import sqlite3
+
+from flask import Flask, flash, redirect, render_template, request, url_for
+from werkzeug.security import generate_password_hash
 
 from database.db import get_db, init_db, seed_db
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-change-me")
 
 with app.app_context():
     init_db()
@@ -18,9 +23,50 @@ def landing():
     return render_template("landing.html")
 
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    return render_template("register.html")
+    if request.method == "GET":
+        return render_template("register.html")
+
+    name = request.form.get("name", "").strip()
+    email = request.form.get("email", "").strip().lower()
+    password = request.form.get("password", "")
+
+    if not name:
+        return render_template("register.html", error="Please enter your name.")
+    if len(name) > 80:
+        return render_template("register.html", error="Name must be 80 characters or fewer.")
+    if not email:
+        return render_template("register.html", error="Please enter your email address.")
+    if "@" not in email:
+        return render_template("register.html", error="Please enter a valid email address.")
+    if len(email) > 120:
+        return render_template("register.html", error="Email must be 120 characters or fewer.")
+    if not password:
+        return render_template("register.html", error="Please enter a password.")
+    if len(password) < 8:
+        return render_template("register.html", error="Password must be at least 8 characters.")
+
+    password_hash = generate_password_hash(password)
+
+    db = get_db()
+    try:
+        db.execute(
+            "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
+            (name, email, password_hash),
+        )
+        db.commit()
+    except sqlite3.IntegrityError:
+        db.rollback()
+        return render_template(
+            "register.html",
+            error="An account with that email already exists.",
+        )
+    finally:
+        db.close()
+
+    flash("Account created — please sign in.", "success")
+    return redirect(url_for("login"))
 
 
 @app.route("/login")
