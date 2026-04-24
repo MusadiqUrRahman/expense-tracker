@@ -1,5 +1,6 @@
 import os
 import sqlite3
+from datetime import datetime
 
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -128,7 +129,37 @@ def logout():
 
 @app.route("/profile")
 def profile():
-    return "Profile page — coming in Step 4"
+    user_id = session.get("user_id")
+    if not user_id:
+        flash("Please sign in to view your profile.", "error")
+        return redirect(url_for("login"))
+
+    db = get_db()
+    try:
+        user = db.execute(
+            "SELECT id, name, email, created_at FROM users WHERE id = ?",
+            (user_id,),
+        ).fetchone()
+    finally:
+        db.close()
+
+    if user is None:
+        session.clear()
+        flash("Your session has expired. Please sign in again.", "error")
+        return redirect(url_for("login"))
+
+    created_at_raw = user["created_at"]
+    try:
+        created_dt = datetime.strptime(created_at_raw, "%Y-%m-%d %H:%M:%S")
+        member_since = created_dt.strftime("Member since %B %Y")
+    except (TypeError, ValueError):
+        member_since = "Member since —"
+
+    return render_template(
+        "profile.html",
+        user=user,
+        member_since=member_since,
+    )
 
 
 @app.route("/expenses/add")
