@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Profile · Spendly{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="profile">
+    <div class="profile-inner">
+
+        <header class="profile-header">
+            <span class="profile-eyebrow">Your account</span>
+            <h1 class="profile-greeting">Hi, <em>{{ user.name }}</em>.</h1>
+            <p class="profile-sub">Here's a snapshot of your Spendly activity.</p>
+        </header>
+
+        <div class="profile-account-card">
+            <div class="profile-account-row">
+                <span class="profile-account-label">
+                    <i data-lucide="mail" class="profile-inline-icon"></i>
+                    Email
+                </span>
+                <span class="profile-account-value">{{ user.email }}</span>
+            </div>
+            <div class="profile-account-row">
+                <span class="profile-account-label">
+                    <i data-lucide="calendar" class="profile-inline-icon"></i>
+                    Status
+                </span>
+                <span class="profile-account-value">{{ member_since }}</span>
+            </div>
+        </div>
+
+        <div class="profile-tiles">
+            <div class="profile-tile">
+                <div class="profile-tile-head">
+                    <span class="profile-tile-chip"><i data-lucide="wallet"></i></span>
+                    <span class="profile-tile-label">Total spent</span>
+                </div>
+                <span class="profile-tile-value">—</span>
+                <span class="profile-tile-hint">Across all time</span>
+            </div>
+            <div class="profile-tile">
+                <div class="profile-tile-head">
+                    <span class="profile-tile-chip"><i data-lucide="calendar-days"></i></span>
+                    <span class="profile-tile-label">This month</span>
+                </div>
+                <span class="profile-tile-value">—</span>
+                <span class="profile-tile-hint">Resets on the 1st</span>
+            </div>
+            <div class="profile-tile">
+                <div class="profile-tile-head">
+                    <span class="profile-tile-chip"><i data-lucide="receipt"></i></span>
+                    <span class="profile-tile-label">Expenses logged</span>
+                </div>
+                <span class="profile-tile-value">—</span>
+                <span class="profile-tile-hint">Total entries</span>
+            </div>
+        </div>
+
+        <section class="profile-panel">
+            <div class="profile-panel-head">
+                <div>
+                    <h2 class="profile-panel-title">Your expenses</h2>
+                    <p class="profile-panel-sub">Everything you've tracked will live here.</p>
+                </div>
+                <a href="{{ url_for('add_expense') }}" class="btn-primary profile-panel-cta">
+                    <i data-lucide="plus"></i>
+                    <span>Add expense</span>
+                </a>
+            </div>
+            <div class="profile-empty">
+                <span class="profile-empty-icon"><i data-lucide="receipt-text"></i></span>
+                <p class="profile-empty-title">No expenses yet</p>
+                <p class="profile-empty-copy">Your expense list will appear here once you start tracking.</p>
+            </div>
+        </section>
+
+    </div>
+</section>
+{% endblock %}
